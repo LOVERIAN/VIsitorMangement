@@ -9,17 +9,22 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.homeone.visitormanagement.databinding.RequestOwnerBinding;
 import com.homeone.visitormanagement.modal.RequestOwnerData;
+import com.kv.popupimageview.PopupImageView;
 
 import java.util.List;
 
@@ -59,6 +64,14 @@ public class OwnerAdapter extends RecyclerView.Adapter<OwnerAdapter.ViewHolder>{
             ref.child("status").setValue("denied");
             dataModel.setStatus("denied");
             Toast.makeText(context,"Denied",Toast.LENGTH_SHORT).show();
+        });
+
+        Glide.with(context).load(dataModel.getProfileUrl()).placeholder(R.drawable.sample_avatar).into(holder.itemRowBinding.imageReq);
+
+        holder.itemRowBinding.imageReq.setOnClickListener( v -> {
+            if (dataModel.getProfileUrl() != null) {
+                new PopupImageView(context, v, dataModel.getProfileUrl());
+            }
         });
 
         holder.bind(dataModel);

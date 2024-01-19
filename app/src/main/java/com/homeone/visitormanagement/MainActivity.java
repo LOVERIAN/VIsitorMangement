@@ -1,6 +1,7 @@
 package com.homeone.visitormanagement;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.homeone.visitormanagement.databinding.ActivityMainBinding;
 import com.homeone.visitormanagement.modal.User;
+import com.homeone.visitormanagement.utility.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,61 +78,28 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 checkCred(email, password);
             }
-               /* mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.i(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.i(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(getApplicationContext(), task.getException().getMessage() , Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
-                                }
-                            }
-                        });*/
-        });
-        /*mainBinding.tabs.addTab(mainBinding.tabs.newTab().setText("LOGIN"));
-        mainBinding.tabs.addTab(mainBinding.tabs.newTab().setText("PORTAL"));
-        mainBinding.tabs.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        LoginAdapter adapter = new LoginAdapter(getSupportFragmentManager(),getLifecycle());
-        mainBinding.viewPager.setAdapter(adapter);
-
-        mainBinding.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mainBinding.viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
         });
 
-        mainBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                mainBinding.tabs.selectTab(mainBinding.tabs.getTabAt(position));
-            }
+        binding.registerText.setOnClickListener(view -> {
+            //open browser
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("https://apartment.homeonetechnologies.in/?page_id=13"));
+            startActivity(intent);
         });
-*/
+
+        binding.forgotPass.setOnClickListener(view -> {
+            //open browser
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("https://apartment.homeonetechnologies.in/wp-login.php?action=lostpassword"));
+            startActivity(intent);
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+        Config.initUrl();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("uid");
@@ -159,7 +128,13 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://34.93.115.120:8081/auth_user";
+            String URL;
+            if (Config.serverUrl != null) {
+                URL = Config.serverUrl + "auth_user";
+            } else {
+                Toast.makeText(this, "Server is not available please contact admin", Toast.LENGTH_SHORT).show();
+                return;
+            }
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("user", email);
             jsonBody.put("pass", password);
@@ -209,6 +184,11 @@ public class MainActivity extends AppCompatActivity {
                         message = "Connection TimeOut! Please check your internet connection.";
                     }
 
+                    if (message != null)
+                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                    binding.progressBarMain.setVisibility(View.GONE);
+
                     Log.e("VOLLEY", message + "errrrr");
                 }
             }) {
@@ -245,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginFirebase(User user) {
-        mAuth.createUserWithEmailAndPassword(user.email, user.password)
+         mAuth.createUserWithEmailAndPassword(user.email, user.password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -328,24 +308,3 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
-
-/*
-
- String message = null;
-                if (volleyError instanceof NetworkError) {
-                    message = "Cannot connect to Internet...Please check your connection!";
-                } else if (volleyError instanceof ServerError) {
-                    message = "The server could not be found. Please try again after some time!!";
-                } else if (volleyError instanceof AuthFailureError) {
-                    message = "Cannot connect to Internet...Please check your connection!";
-                } else if (volleyError instanceof ParseError) {
-                    message = "Parsing error! Please try again after some time!!";
-                } else if (volleyError instanceof NoConnectionError) {
-                    message = "Cannot connect to Internet...Please check your connection!";
-                } else if (volleyError instanceof TimeoutError) {
-                    message = "Connection TimeOut! Please check your internet connection.";
-                }
-
-                Log.e("VOLLEY", message);
- */

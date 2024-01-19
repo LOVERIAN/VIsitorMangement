@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/dashboard"
+        android:title="@string/web_dashboard"/>
+    <item
+        android:id="@+id/alert"
+        android:title="@string/security_alert"/>
+    <item
         android:id="@+id/more"
         android:title="@string/more"
         app:showAsAction="never" />

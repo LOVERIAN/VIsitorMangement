@@ -4,21 +4,28 @@ public class RequestOwnerData {
     private String status;
     public String visitorName;
     private String purpose;
-    private String image;
+    private String ProfileUrl;
     private String owner;
     private Long uuid;
     private String id;
 
-
-
-    public RequestOwnerData(Long uuid, String status, String visitorName, String purpose, String image, String owner) {
+    public RequestOwnerData(Long uuid, String status, String visitorName, String purpose, String ProfileUrl, String owner) {
         this.status = status;
         this.visitorName = visitorName;
         this.purpose = purpose;
-        this.image = image;
+        this.ProfileUrl = ProfileUrl;
         this.owner = owner;
         this.uuid = uuid;
     }
+
+    public String getProfileUrl() {
+        return ProfileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        ProfileUrl = profileUrl;
+    }
+
     public String getId() {
         return id;
     }
@@ -44,13 +51,6 @@ public class RequestOwnerData {
 
     public RequestOwnerData() {}
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getOwner() {
         return owner;

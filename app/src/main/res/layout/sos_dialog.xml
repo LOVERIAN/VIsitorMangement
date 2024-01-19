@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_back"
+    android:elevation="10dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="#F61515"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Raise Alarm"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/call_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="36dp"
+            android:src="@drawable/ic_baseline_call_24"
+            app:backgroundTint="#D6D5D5"
+            app:tint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/other_fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/other_fab"
+            app:layout_constraintTop_toTopOf="@+id/other_fab" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fire_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="16dp"
+            app:tint="@null"
+            android:src="@drawable/ic_baseline_local_fire_department_24"
+            app:backgroundTint="#D6D5D5"
+            app:layout_constraintBottom_toBottomOf="@+id/other_fab"
+            app:layout_constraintEnd_toStartOf="@+id/other_fab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/other_fab" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/other_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_baseline_help_outline_24"
+            app:tint="@null"
+            app:backgroundTint="#D6D5D5"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Fire"
+            app:layout_constraintEnd_toEndOf="@+id/fire_fab"
+            app:layout_constraintStart_toStartOf="@+id/fire_fab"
+            app:layout_constraintTop_toBottomOf="@+id/fire_fab" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Other"
+            app:layout_constraintEnd_toEndOf="@+id/other_fab"
+            app:layout_constraintStart_toStartOf="@+id/other_fab"
+            app:layout_constraintTop_toBottomOf="@+id/other_fab" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Call"
+            app:layout_constraintEnd_toEndOf="@+id/call_fab"
+            app:layout_constraintStart_toStartOf="@+id/call_fab"
+            app:layout_constraintTop_toBottomOf="@+id/call_fab" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

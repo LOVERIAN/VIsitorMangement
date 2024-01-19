@@ -1,5 +1,11 @@
 package com.homeone.visitormanagement;
 
+/*
+    Dashboard activity (webView Activity)
+    when form submits on webpage api is called to notify server that form is submitted
+    also image is stored in DB
+ */
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -38,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.homeone.visitormanagement.modal.User;
+import com.homeone.visitormanagement.utility.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +68,6 @@ public class DashboardActivity extends AppCompatActivity {
     private String id;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,74 +115,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
-    /*
-        private void checkCred() {
 
-            try {
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String URL = "http://34.93.115.120:8081/send_prompt";
-                JSONObject jsonBody = new JSONObject();
-                jsonBody.put("prompt", "show tables");
-                final String requestBody = jsonBody.toString();
-
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("VOLLEY", response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        String message = null;
-                        if (volleyError instanceof NetworkError) {
-                            message = "Cannot connect to Internet...Please check your connection!";
-                        } else if (volleyError instanceof ServerError) {
-                            message = "The server could not be found. Please try again after some time!!";
-                        } else if (volleyError instanceof AuthFailureError) {
-                            message = "Cannot connect to Internet...Please check your connection!";
-                        } else if (volleyError instanceof ParseError) {
-                            message = "Parsing error! Please try again after some time!!";
-                        } else if (volleyError instanceof NoConnectionError) {
-                            message = "Cannot connect to Internet...Please check your connection!";
-                        } else if (volleyError instanceof TimeoutError) {
-                            message = "Connection TimeOut! Please check your internet connection.";
-                        }
-
-                        Log.e("VOLLEY", message);
-                    }
-                }) {
-                    @Override
-                    public String getBodyContentType() {
-                        return "application/json; charset=utf-8";
-                    }
-
-                    @Override
-                    public byte[] getBody() throws AuthFailureError {
-                        try {
-                            return requestBody == null ? null : requestBody.getBytes("utf-8");
-                        } catch (UnsupportedEncodingException uee) {
-                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                        //String responseString = "";
-                        //if (response != null) {
-                        //  responseString = String.valueOf(response.statusCode);
-                        //}
-                        return super.parseNetworkResponse(response);
-                    }
-
-                };
-
-                requestQueue.add(stringRequest);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    */
     private static class WebPortal extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -195,6 +135,10 @@ public class DashboardActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(constraintLayout.getWindowToken(), 0);
 
+        myWebView.clearCache(true);
+        myWebView.clearHistory();
+        CookieManager.getInstance().removeAllCookies(null);
+        CookieManager.getInstance().flush();
 
         myWebView.loadUrl("https://apartment.homeonetechnologies.in/");
        // myWebView.setVisibility(View.INVISIBLE);
@@ -224,8 +168,6 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         myWebView.setVisibility(View.VISIBLE);
-        myWebView.clearCache(true);
-        myWebView.clearHistory();
 
         WebView view = (WebView) this.findViewById(R.id.webView);
 
@@ -237,7 +179,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void sendPhoto(String uid) {
 
-        BottomSheetDialog bottomSheet = new BottomSheetDialog(id);
+        BottomSheetDialog bottomSheet = new BottomSheetDialog(uid);
         bottomSheet.show(getSupportFragmentManager(),
                 "ModalBottomSheet");
 
@@ -246,7 +188,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void formSubmitted(String gatekeeperName) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String URL = "http://34.93.115.120:8081/form_submit";
+            String URL = Config.serverUrl + "form_submit";
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("user", gatekeeperName);
             final String requestBody = jsonBody.toString();

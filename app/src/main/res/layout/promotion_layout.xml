@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Card View widget-->
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/promotion_card"
+    android:layout_width="200dp"
+    android:layout_height="130dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    card_view:cardCornerRadius="14dp"
+    card_view:cardElevation="16dp">
+
+    <ImageView
+        android:id="@+id/banner_ad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/banner_placeholder" />
+
+</androidx.cardview.widget.CardView>

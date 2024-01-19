@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">VIsitor Mangement</string>
+    <string name="app_name">Ravima Care</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="more">log out</string>
     <string name="page_title">Visitor Management</string>
+    <string name="web_dashboard">web dashboard</string>
+    <string name="security_alert">security alert</string>
 </resources>

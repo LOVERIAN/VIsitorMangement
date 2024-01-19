@@ -6,8 +6,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.homeone.visitormanagement.adapters.ViewPagerAdapter;
 import com.homeone.visitormanagement.databinding.ActivityHomeBinding;
 import com.homeone.visitormanagement.databinding.RequestLayoutBinding;
 import com.homeone.visitormanagement.modal.RequestData;
@@ -39,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     DatabaseReference myRef;
     DatabaseReference reference;
     User userdata;
-
+    ArrayList<String> tabList = new ArrayList<>();
     Button addVisitorBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("requests");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        /*myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataModelList.clear();
@@ -68,40 +73,60 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+*/
+        //addVisitorBtn = findViewById(R.id.visitorBtn);
 
-        addVisitorBtn = findViewById(R.id.visitorBtn);
-
-        addVisitorBtn.setOnClickListener( view -> {
+       /* addVisitorBtn.setOnClickListener( view -> {
             //sendPhoto();
             Intent i = new Intent(this, DashboardActivity.class);
             startActivity(i);
-        });
-        MaterialToolbar materialToolbar = findViewById(R.id.topAppBar);
+        });*/
+
+        MaterialToolbar materialToolbar = findViewById(R.id.gatekeeper_bar);
 
         materialToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
+                switch (item.getItemId()) {
+                    case R.id.more:
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.panabell:
+                        String packageName = "cn.ubia.pana";
+                        Intent launchIntent = null;
+                        try{
+                            launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+                        } catch (Exception ignored) {}
+
+                        if(launchIntent == null){
+                            startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+                        } else {
+                            startActivity(launchIntent);
+                        }
+                        return true;
+                    case R.id.new_visitor:
+                        Intent i = new Intent(HomeActivity.this, DashboardActivity.class);
+                        startActivity(i);
+                        return true;
+                }
+                return false;
+
             }
         });
 
+        tabList.add("Pending Requests");
+        tabList.add("Raised Alerts");
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
+        binding.viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(binding.tabLayout,binding.viewPager,(tab, position) -> {
+            tab.setText(tabList.get(position));
+        }).attach();
+
     }
 
-    public void updateView() {
-        GateKeeperAdapter myRecyclerViewAdapter = new GateKeeperAdapter(dataModelList, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
-        binding.requestList.setLayoutManager(linearLayoutManager);
-        binding.requestList.setAdapter(myRecyclerViewAdapter);
-    }
-    private void sendPhoto() {
-
-        BottomSheetDialog bottomSheet = new BottomSheetDialog();
-        bottomSheet.show(getSupportFragmentManager(),
-                "ModalBottomSheet");
-    }
 }

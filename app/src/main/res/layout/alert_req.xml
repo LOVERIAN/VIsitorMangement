@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/card_back"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+
+        <TextView
+            android:id="@+id/alertMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Alert raised by "
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/dismissBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fire_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF0000"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:fabSize="mini"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alertMessage"
+            app:srcCompat="@drawable/ic_baseline_local_fire_department_24"
+            app:tint="@null" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/other_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF0000"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:fabSize="mini"
+            app:layout_constraintStart_toEndOf="@+id/fire_alert"
+            app:layout_constraintTop_toBottomOf="@+id/alertMessage"
+            app:srcCompat="@drawable/ic_baseline_help_outline_24"
+            app:tint="@null" />
+
+        <Button
+            android:id="@+id/dismissBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="dismiss"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/alertMessage" />
+
+        <TextView
+            android:id="@+id/fire_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fire alert"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/fire_alert"
+            app:layout_constraintStart_toStartOf="@+id/fire_alert"
+            app:layout_constraintTop_toBottomOf="@+id/fire_alert" />
+
+        <TextView
+            android:id="@+id/other_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="other alert"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/other_alert"
+            app:layout_constraintStart_toStartOf="@+id/other_alert"
+            app:layout_constraintTop_toBottomOf="@+id/other_alert" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
